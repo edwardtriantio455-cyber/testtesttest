@@ -144,12 +144,14 @@ export const momBabyBooths: Booth[] = [
   b('D12','D12','mom-baby','D',20000000,12,  9),
 
   // Block E – large centre booths (cols 8-10, 3 wide)
+  // Each is 2 rows tall so the gap rows (4 and 7) between B clusters
+  // create visible aisles between E1, E2, and E3X
   { id:'E1',  label:'E1',  area:'mom-baby', block:'E', price:70000000,
-    x:8*S, y:2*S, width:3*CELL+2*GAP, height:3*CELL+2*GAP },
+    x:8*S, y:2*S, width:3*CELL+2*GAP, height:2*CELL+GAP },
   { id:'E2',  label:'E2',  area:'mom-baby', block:'E', price:70000000,
-    x:8*S, y:5*S, width:3*CELL+2*GAP, height:3*CELL+2*GAP },
+    x:8*S, y:5*S, width:3*CELL+2*GAP, height:2*CELL+GAP },
   { id:'E3X', label:'E3X', area:'mom-baby', block:'E', price:90000000,
-    x:8*S, y:8*S, width:3*CELL+2*GAP, height:4*CELL+3*GAP },
+    x:8*S, y:8*S, width:3*CELL+2*GAP, height:2*CELL+GAP },
 ];
 
 // ─── F&B ─────────────────────────────────────────────────────────────────────
