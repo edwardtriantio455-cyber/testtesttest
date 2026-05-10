@@ -4,9 +4,12 @@ import { allBooths, formatPrice } from '../data/booths';
 
 interface Booking {
   id: string;
-  boothId: string;
+  boothId?: string;
+  boothIds?: string[];
+  boothLabels?: string[];
   boothName: string;
-  price: number;
+  price?: number;
+  totalPrice?: number;
   name: string;
   email: string;
   phone: string;
@@ -15,6 +18,19 @@ interface Booking {
   status: 'pending' | 'confirmed' | 'rejected';
   createdAt: string;
   notes: string;
+}
+
+function getBookingPrice(b: Booking) {
+  return b.totalPrice ?? b.price ?? 0;
+}
+
+function getBoothIds(b: Booking): string[] {
+  return b.boothIds ?? (b.boothId ? [b.boothId] : []);
+}
+
+function receiptUrl(file: string) {
+  if (file.startsWith('http')) return file;
+  return `/uploads/${file}`;
 }
 
 const STATUS_COLORS = {
@@ -41,8 +57,6 @@ export default function AdminPage() {
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'bookings' | 'map'>('bookings');
-
-  const boothMap = Object.fromEntries(allBooths.map(b => [b.id, b]));
 
   function login(e: React.FormEvent) {
     e.preventDefault();
@@ -113,8 +127,10 @@ export default function AdminPage() {
     if (filter !== 'all' && b.status !== filter) return false;
     if (search) {
       const s = search.toLowerCase();
-      return b.name.toLowerCase().includes(s) || b.email.toLowerCase().includes(s) ||
-        b.boothId.toLowerCase().includes(s) || b.company.toLowerCase().includes(s);
+      return b.name.toLowerCase().includes(s) ||
+        b.email.toLowerCase().includes(s) ||
+        b.boothName.toLowerCase().includes(s) ||
+        (b.company ?? '').toLowerCase().includes(s);
     }
     return true;
   });
@@ -124,7 +140,7 @@ export default function AdminPage() {
     pending: bookings.filter(b => b.status === 'pending').length,
     confirmed: bookings.filter(b => b.status === 'confirmed').length,
     rejected: bookings.filter(b => b.status === 'rejected').length,
-    revenue: bookings.filter(b => b.status === 'confirmed').reduce((s, b) => s + b.price, 0),
+    revenue: bookings.filter(b => b.status === 'confirmed').reduce((s, b) => s + getBookingPrice(b), 0),
   };
 
   return (
@@ -190,7 +206,6 @@ export default function AdminPage() {
           <div className="flex gap-4 flex-col lg:flex-row">
             {/* List */}
             <div className="flex-1 min-w-0">
-              {/* Filters */}
               <div className="bg-white rounded-xl border border-gray-200 p-3 mb-3 flex flex-wrap gap-3 items-center">
                 <input
                   className="flex-1 min-w-40 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"
@@ -235,7 +250,7 @@ export default function AdminPage() {
                           <div className="text-xs text-gray-400 mt-0.5">{b.email} · {b.phone}</div>
                         </div>
                         <div className="text-right shrink-0">
-                          <div className="font-semibold text-gray-700 text-sm">{formatPrice(b.price)}</div>
+                          <div className="font-semibold text-gray-700 text-sm">{formatPrice(getBookingPrice(b))}</div>
                           <div className="text-xs text-gray-400">{new Date(b.createdAt).toLocaleDateString('id-ID')}</div>
                         </div>
                       </div>
@@ -250,9 +265,8 @@ export default function AdminPage() {
               <div className="w-full lg:w-96 bg-white rounded-xl border border-gray-200 p-5 h-fit sticky top-20">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <div className="text-2xl font-bold text-gray-800">{selected.boothName}</div>
-                    <div className="text-sm text-gray-400">{boothMap[selected.boothId]?.area} · Block {boothMap[selected.boothId]?.block}</div>
-                    <div className="font-semibold text-pink-600 mt-1">{formatPrice(selected.price)}</div>
+                    <div className="text-xl font-bold text-gray-800">{selected.boothName}</div>
+                    <div className="font-semibold text-pink-600 mt-1">{formatPrice(getBookingPrice(selected))}</div>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full border font-medium ${STATUS_COLORS[selected.status]}`}>
                     {STATUS_LABELS[selected.status]}
@@ -271,18 +285,18 @@ export default function AdminPage() {
                   <div className="mb-4">
                     <div className="text-xs text-gray-400 mb-1">Payment Receipt</div>
                     <a
-                      href={`/uploads/${selected.receiptFile}`}
+                      href={receiptUrl(selected.receiptFile)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block"
                     >
                       <img
-                        src={`/uploads/${selected.receiptFile}`}
+                        src={receiptUrl(selected.receiptFile)}
                         alt="Receipt"
                         className="w-full rounded-lg border border-gray-200 max-h-48 object-contain hover:opacity-90"
                         onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
-                      <div className="text-xs text-center text-pink-600 mt-1">📎 {selected.receiptFile}</div>
+                      <div className="text-xs text-center text-pink-600 mt-1">📎 View Receipt</div>
                     </a>
                   </div>
                 )}
@@ -351,7 +365,9 @@ export default function AdminPage() {
                   <h3 className="font-semibold text-gray-700 mb-2">{areaName}</h3>
                   <div className="flex flex-wrap gap-1.5">
                     {areaBooths.map(b => {
-                      const booking = bookings.find(bk => bk.boothId === b.id && bk.status !== 'rejected');
+                      const booking = bookings.find(bk =>
+                        bk.status !== 'rejected' && getBoothIds(bk).includes(b.id)
+                      );
                       let bg = 'bg-green-100 border-green-300 text-green-800';
                       if (booking?.status === 'pending') bg = 'bg-amber-100 border-amber-400 text-amber-800';
                       if (booking?.status === 'confirmed') bg = 'bg-red-100 border-red-400 text-red-800';
