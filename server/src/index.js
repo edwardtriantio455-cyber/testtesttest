@@ -20,7 +20,6 @@ if (!fs.existsSync(DB_FILE)) {
 function readDB() {
   return JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
 }
-
 function writeDB(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
@@ -41,31 +40,42 @@ app.get('/api/bookings', (req, res) => {
   res.json(db.bookings);
 });
 
-// Get booked booth IDs (public)
+// Get all booked booth IDs (public) – supports both old single and new multi format
 app.get('/api/booked-booths', (req, res) => {
   const db = readDB();
-  const bookedIds = db.bookings
+  const ids = db.bookings
     .filter(b => b.status !== 'rejected')
-    .map(b => b.boothId);
-  res.json(bookedIds);
+    .flatMap(b => b.boothIds || (b.boothId ? [b.boothId] : []));
+  res.json(ids);
 });
 
-// Create booking
+// Create booking (supports multiple booths in one submission)
 app.post('/api/bookings', upload.single('receipt'), (req, res) => {
-  const { boothId, boothName, price, name, email, phone, company } = req.body;
-  if (!boothId || !name || !email || !phone) {
+  const { boothIds, boothLabels, totalPrice, name, email, phone, company } = req.body;
+  if (!boothIds || !name || !email || !phone) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
+
+  const ids = JSON.parse(boothIds);
+  const labels = JSON.parse(boothLabels);
   const db = readDB();
-  const existing = db.bookings.find(b => b.boothId === boothId && b.status !== 'rejected');
-  if (existing) {
-    return res.status(409).json({ error: 'Booth already booked' });
+
+  // Check each booth for conflicts
+  const takenIds = db.bookings
+    .filter(b => b.status !== 'rejected')
+    .flatMap(b => b.boothIds || (b.boothId ? [b.boothId] : []));
+
+  const conflict = ids.find(id => takenIds.includes(id));
+  if (conflict) {
+    return res.status(409).json({ error: 'Booth already booked', conflictBooth: conflict });
   }
+
   const booking = {
     id: uuidv4(),
-    boothId,
-    boothName,
-    price,
+    boothIds: ids,
+    boothLabels: labels,
+    boothName: labels.join(', '),
+    totalPrice: Number(totalPrice),
     name,
     email,
     phone,
@@ -75,12 +85,13 @@ app.post('/api/bookings', upload.single('receipt'), (req, res) => {
     createdAt: new Date().toISOString(),
     notes: '',
   };
+
   db.bookings.push(booking);
   writeDB(db);
   res.status(201).json(booking);
 });
 
-// Update booking status (admin)
+// Update booking (admin)
 app.patch('/api/bookings/:id', (req, res) => {
   const db = readDB();
   const idx = db.bookings.findIndex(b => b.id === req.params.id);
@@ -100,7 +111,7 @@ app.delete('/api/bookings/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// Serve built React app in production
+// Serve built React app
 const clientDist = path.join(__dirname, '../../client/dist');
 if (fs.existsSync(clientDist)) {
   app.use(express.static(clientDist));
