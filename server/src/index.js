@@ -11,6 +11,8 @@ const PORT = 3001;
 const DB_FILE = path.join(__dirname, '../data/db.json');
 const UPLOADS_DIR = path.join(__dirname, '../uploads');
 
+fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
+fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 if (!fs.existsSync(DB_FILE)) {
   fs.writeFileSync(DB_FILE, JSON.stringify({ bookings: [] }, null, 2));
 }
