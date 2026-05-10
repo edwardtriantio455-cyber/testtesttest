@@ -30,28 +30,30 @@ function b(
 
 // ─── MOM & BABY ─────────────────────────────────────────────────────────────
 //
-// 14-col × 13-row grid matching the reference floor plan:
+// 19-col × 13-row grid with walkway gaps between every cluster:
 //
-// col:  0   1   2   3   4   5   6   7   8   9  10  11  12  13
-// r 0:  –   –   A3  A2  A1  –   –   –   –  A20 A21 A22  –   –
-// r 1:  A4  –   –   –   –   –   –   –   –   –   –   –   – A23
-// r 2:  A5  –   B1  B7  C1  D1 [E1  E1] D7  C7 B13 B19  – A24
-// r 3:  A6  –   B2  B8  C2  D2 [E1  E1] D8  C8 B14 B20  – A25
-// r 4:  A7  –   –   –   –   – [E1  E1]  –   –   –   –   – A26
-// r 5:  A8  –   B3  B9  C3  D3 [E2  E2] D9  C9 B15 B21  – A27
-// r 6:  A9  –   B4 B10  C4  D4 [E2  E2] D10 C10 B16 B22  – A28
-// r 7: A10  –   –   –   –   – [E2  E2]  –   –   –   –   –  –
-// r 8: A11  –   B5 B11  C5  D5 [E3X E3X] D11 C11 B17 B23  – A29
-// r 9: A12  –   B6 B12  C6  D6 [E3X E3X] D12 C12 B18 B24  – A30
-// r10: A13  –   –   –   –   – [E3X E3X]  –   –   –   –   – A31
-// r11: A14  –   –   –   –   – [E3X E3X]  –   –   –   –   –  –
-// r12:  –  A15 A16 A17 A18 A19  –   – A37 A36 A35 A34 A33 A32
+// col:  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+//       Aw  gap BL  BR  gap CL  DL  gap [E1/E2/E3X ] gap DR  CR  gap BL  BR  gap Aw
+//
+// r 0:  –   A3  A2  A1  –   –   –   –   –   –   –   –   –   –   – A20 A21 A22  –
+// r 1:  A4  –   –   –   –   –   –   –   –   –   –   –   –   –   –   –   –   – A23
+// r 2:  A5  –   B1  B7  –   C1  D1  –  [E1          ]  –   D7  C7  –  B13 B19  – A24
+// r 3:  A6  –   B2  B8  –   C2  D2  –  [E1          ]  –   D8  C8  –  B14 B20  – A25
+// r 4:  A7  –   –   –   –   –   –   –  [E1          ]  –   –   –   –   –   –   – A26
+// r 5:  A8  –   B3  B9  –   C3  D3  –  [E2          ]  –   D9  C9  –  B15 B21  – A27
+// r 6:  A9  –   B4 B10  –   C4  D4  –  [E2          ]  –  D10 C10  –  B16 B22  – A28
+// r 7: A10  –   –   –   –   –   –   –  [E2          ]  –   –   –   –   –   –   –  –
+// r 8: A11  –   B5 B11  –   C5  D5  –  [E3X         ]  –  D11 C11  –  B17 B23  – A29
+// r 9: A12  –   B6 B12  –   C6  D6  –  [E3X         ]  –  D12 C12  –  B18 B24  – A30
+// r10: A13  –   –   –   –   –   –   –  [E3X         ]  –   –   –   –   –   –   – A31
+// r11: A14  –   –   –   –   –   –   –  [E3X         ]  –   –   –   –   –   –   –  –
+// r12:  –  A15 A16 A17 A18 A19  –   –   –   –   –   –   – A37 A36 A35 A34 A33 A32
 
 export const momBabyBooths: Booth[] = [
   // Block A – 12M – outer perimeter
-  b('A3','A3','mom-baby','A',12000000,  2,  0),
-  b('A2','A2','mom-baby','A',12000000,  3,  0),
-  b('A1','A1','mom-baby','A',12000000,  4,  0),
+  b('A3','A3','mom-baby','A',12000000,  1,  0),
+  b('A2','A2','mom-baby','A',12000000,  2,  0),
+  b('A1','A1','mom-baby','A',12000000,  3,  0),
   b('A4','A4','mom-baby','A',12000000,  0,  1),
   b('A5','A5','mom-baby','A',12000000,  0,  2),
   b('A6','A6','mom-baby','A',12000000,  0,  3),
@@ -68,26 +70,26 @@ export const momBabyBooths: Booth[] = [
   b('A17','A17','mom-baby','A',12000000, 3, 12),
   b('A18','A18','mom-baby','A',12000000, 4, 12),
   b('A19','A19','mom-baby','A',12000000, 5, 12),
-  b('A20','A20','mom-baby','A',12000000,  9,  0),
-  b('A21','A21','mom-baby','A',12000000, 10,  0),
-  b('A22','A22','mom-baby','A',12000000, 11,  0),
-  b('A23','A23','mom-baby','A',12000000, 13,  1),
-  b('A24','A24','mom-baby','A',12000000, 13,  2),
-  b('A25','A25','mom-baby','A',12000000, 13,  3),
-  b('A26','A26','mom-baby','A',12000000, 13,  4),
-  b('A27','A27','mom-baby','A',12000000, 13,  5),
-  b('A28','A28','mom-baby','A',12000000, 13,  6),
-  b('A29','A29','mom-baby','A',12000000, 13,  8),
-  b('A30','A30','mom-baby','A',12000000, 13,  9),
-  b('A31','A31','mom-baby','A',12000000, 13, 10),
-  b('A37','A37','mom-baby','A',12000000,  8, 12),
-  b('A36','A36','mom-baby','A',12000000,  9, 12),
-  b('A35','A35','mom-baby','A',12000000, 10, 12),
-  b('A34','A34','mom-baby','A',12000000, 11, 12),
-  b('A33','A33','mom-baby','A',12000000, 12, 12),
-  b('A32','A32','mom-baby','A',12000000, 13, 12),
+  b('A20','A20','mom-baby','A',12000000, 15,  0),
+  b('A21','A21','mom-baby','A',12000000, 16,  0),
+  b('A22','A22','mom-baby','A',12000000, 17,  0),
+  b('A23','A23','mom-baby','A',12000000, 18,  1),
+  b('A24','A24','mom-baby','A',12000000, 18,  2),
+  b('A25','A25','mom-baby','A',12000000, 18,  3),
+  b('A26','A26','mom-baby','A',12000000, 18,  4),
+  b('A27','A27','mom-baby','A',12000000, 18,  5),
+  b('A28','A28','mom-baby','A',12000000, 18,  6),
+  b('A29','A29','mom-baby','A',12000000, 18,  8),
+  b('A30','A30','mom-baby','A',12000000, 18,  9),
+  b('A31','A31','mom-baby','A',12000000, 18, 10),
+  b('A37','A37','mom-baby','A',12000000, 13, 12),
+  b('A36','A36','mom-baby','A',12000000, 14, 12),
+  b('A35','A35','mom-baby','A',12000000, 15, 12),
+  b('A34','A34','mom-baby','A',12000000, 16, 12),
+  b('A33','A33','mom-baby','A',12000000, 17, 12),
+  b('A32','A32','mom-baby','A',12000000, 18, 12),
 
-  // Block B – 14M – left cluster cols 2-3, right cluster cols 10-11
+  // Block B – 14M – left cluster cols 2-3, right cluster cols 15-16
   b('B1','B1','mom-baby','B',14000000,   2,  2),
   b('B7','B7','mom-baby','B',14000000,   3,  2),
   b('B2','B2','mom-baby','B',14000000,   2,  3),
@@ -100,54 +102,54 @@ export const momBabyBooths: Booth[] = [
   b('B11','B11','mom-baby','B',14000000,  3,  8),
   b('B6','B6','mom-baby','B',14000000,   2,  9),
   b('B12','B12','mom-baby','B',14000000,  3,  9),
-  b('B13','B13','mom-baby','B',14000000, 10,  2),
-  b('B19','B19','mom-baby','B',14000000, 11,  2),
-  b('B14','B14','mom-baby','B',14000000, 10,  3),
-  b('B20','B20','mom-baby','B',14000000, 11,  3),
-  b('B15','B15','mom-baby','B',14000000, 10,  5),
-  b('B21','B21','mom-baby','B',14000000, 11,  5),
-  b('B16','B16','mom-baby','B',14000000, 10,  6),
-  b('B22','B22','mom-baby','B',14000000, 11,  6),
-  b('B17','B17','mom-baby','B',14000000, 10,  8),
-  b('B23','B23','mom-baby','B',14000000, 11,  8),
-  b('B18','B18','mom-baby','B',14000000, 10,  9),
-  b('B24','B24','mom-baby','B',14000000, 11,  9),
+  b('B13','B13','mom-baby','B',14000000, 15,  2),
+  b('B19','B19','mom-baby','B',14000000, 16,  2),
+  b('B14','B14','mom-baby','B',14000000, 15,  3),
+  b('B20','B20','mom-baby','B',14000000, 16,  3),
+  b('B15','B15','mom-baby','B',14000000, 15,  5),
+  b('B21','B21','mom-baby','B',14000000, 16,  5),
+  b('B16','B16','mom-baby','B',14000000, 15,  6),
+  b('B22','B22','mom-baby','B',14000000, 16,  6),
+  b('B17','B17','mom-baby','B',14000000, 15,  8),
+  b('B23','B23','mom-baby','B',14000000, 16,  8),
+  b('B18','B18','mom-baby','B',14000000, 15,  9),
+  b('B24','B24','mom-baby','B',14000000, 16,  9),
 
-  // Block C – left col 4 (C1-C6), right col 9 (C7-C12)
-  b('C1','C1','mom-baby','C',15000000,  4,  2),
-  b('C2','C2','mom-baby','C',15000000,  4,  3),
-  b('C3','C3','mom-baby','C',15000000,  4,  5),
-  b('C4','C4','mom-baby','C',15000000,  4,  6),
-  b('C5','C5','mom-baby','C',20000000,  4,  8),
-  b('C6','C6','mom-baby','C',20000000,  4,  9),
-  b('C7','C7','mom-baby','C',15000000,  9,  2),
-  b('C8','C8','mom-baby','C',15000000,  9,  3),
-  b('C9','C9','mom-baby','C',15000000,  9,  5),
-  b('C10','C10','mom-baby','C',15000000, 9,  6),
-  b('C11','C11','mom-baby','C',20000000, 9,  8),
-  b('C12','C12','mom-baby','C',20000000, 9,  9),
+  // Block C – left col 5 (C1-C6), right col 13 (C7-C12)
+  b('C1','C1','mom-baby','C',15000000,  5,  2),
+  b('C2','C2','mom-baby','C',15000000,  5,  3),
+  b('C3','C3','mom-baby','C',15000000,  5,  5),
+  b('C4','C4','mom-baby','C',15000000,  5,  6),
+  b('C5','C5','mom-baby','C',20000000,  5,  8),
+  b('C6','C6','mom-baby','C',20000000,  5,  9),
+  b('C7','C7','mom-baby','C',15000000, 13,  2),
+  b('C8','C8','mom-baby','C',15000000, 13,  3),
+  b('C9','C9','mom-baby','C',15000000, 13,  5),
+  b('C10','C10','mom-baby','C',15000000,13,  6),
+  b('C11','C11','mom-baby','C',20000000,13,  8),
+  b('C12','C12','mom-baby','C',20000000,13,  9),
 
-  // Block D – left col 5 (D1-D6), right col 8 (D7-D12)
-  b('D1','D1','mom-baby','D',15000000,  5,  2),
-  b('D2','D2','mom-baby','D',15000000,  5,  3),
-  b('D3','D3','mom-baby','D',15000000,  5,  5),
-  b('D4','D4','mom-baby','D',15000000,  5,  6),
-  b('D5','D5','mom-baby','D',20000000,  5,  8),
-  b('D6','D6','mom-baby','D',20000000,  5,  9),
-  b('D7','D7','mom-baby','D',15000000,  8,  2),
-  b('D8','D8','mom-baby','D',15000000,  8,  3),
-  b('D9','D9','mom-baby','D',15000000,  8,  5),
-  b('D10','D10','mom-baby','D',15000000, 8,  6),
-  b('D11','D11','mom-baby','D',20000000, 8,  8),
-  b('D12','D12','mom-baby','D',20000000, 8,  9),
+  // Block D – left col 6 (D1-D6), right col 12 (D7-D12)
+  b('D1','D1','mom-baby','D',15000000,  6,  2),
+  b('D2','D2','mom-baby','D',15000000,  6,  3),
+  b('D3','D3','mom-baby','D',15000000,  6,  5),
+  b('D4','D4','mom-baby','D',15000000,  6,  6),
+  b('D5','D5','mom-baby','D',20000000,  6,  8),
+  b('D6','D6','mom-baby','D',20000000,  6,  9),
+  b('D7','D7','mom-baby','D',15000000, 12,  2),
+  b('D8','D8','mom-baby','D',15000000, 12,  3),
+  b('D9','D9','mom-baby','D',15000000, 12,  5),
+  b('D10','D10','mom-baby','D',15000000,12,  6),
+  b('D11','D11','mom-baby','D',20000000,12,  8),
+  b('D12','D12','mom-baby','D',20000000,12,  9),
 
-  // Block E – large centre booths (cols 6-7)
+  // Block E – large centre booths (cols 8-10, 3 wide)
   { id:'E1',  label:'E1',  area:'mom-baby', block:'E', price:70000000,
-    x:6*S, y:2*S, width:2*CELL+GAP, height:3*CELL+2*GAP },
+    x:8*S, y:2*S, width:3*CELL+2*GAP, height:3*CELL+2*GAP },
   { id:'E2',  label:'E2',  area:'mom-baby', block:'E', price:70000000,
-    x:6*S, y:5*S, width:2*CELL+GAP, height:3*CELL+2*GAP },
+    x:8*S, y:5*S, width:3*CELL+2*GAP, height:3*CELL+2*GAP },
   { id:'E3X', label:'E3X', area:'mom-baby', block:'E', price:90000000,
-    x:6*S, y:8*S, width:2*CELL+GAP, height:4*CELL+3*GAP },
+    x:8*S, y:8*S, width:3*CELL+2*GAP, height:4*CELL+3*GAP },
 ];
 
 // ─── F&B ─────────────────────────────────────────────────────────────────────
